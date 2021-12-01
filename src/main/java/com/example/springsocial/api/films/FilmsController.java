@@ -24,6 +24,11 @@ public class FilmsController {
         return filmRepository.findAll();
     }
 
+    @GetMapping("/id/{id}")
+    public Film getFilmById(@PathVariable Long id) {
+        return filmRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("Film of ID = " + id + " does not exist"));
+    }
+
     @GetMapping("/{id}")
     public List<Film> getFilmsByUser(@PathVariable Long id) {
         List<Film> allFilms = filmRepository.findAll();
