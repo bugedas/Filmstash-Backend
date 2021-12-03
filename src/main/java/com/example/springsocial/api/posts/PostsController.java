@@ -49,16 +49,16 @@ public class PostsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updatePost(@PathVariable Long id, @RequestBody Post post) {
+    public ResponseEntity updatePost(@PathVariable(value = "id") Long id, @RequestBody Post post) {
         Post currentPost = postRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("Post of ID = " + id + " does not exist"));
         currentPost.setUserId(post.getUserId());
         currentPost.setFilmId(post.getFilmId());
         currentPost.setMessage(post.getMessage());
         currentPost.setLikes(post.getLikes());
         currentPost.setDate(post.getDate());
-        currentPost = postRepository.save(post);
+        final Post updatedPost = postRepository.save(currentPost);
 
-        return ResponseEntity.ok(currentPost);
+        return ResponseEntity.ok(updatedPost);
     }
 
     @DeleteMapping("/{id}")
