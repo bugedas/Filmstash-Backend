@@ -49,16 +49,16 @@ public class CommentsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateComment(@PathVariable Long id, @RequestBody Comment comment) {
+    public ResponseEntity updateComment(@PathVariable(value = "id") Long id, @RequestBody Comment comment) {
         Comment currentComment = commentRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("Comment of ID = " + id + " does not exist"));
         currentComment.setPostId(comment.getPostId());
         currentComment.setUserId(comment.getUserId());
         currentComment.setMessage(comment.getMessage());
         currentComment.setLikes(comment.getLikes());
         currentComment.setDate(comment.getDate());
-        currentComment = commentRepository.save(comment);
+        final Comment updatedComment = commentRepository.save(currentComment);
 
-        return ResponseEntity.ok(currentComment);
+        return ResponseEntity.ok(updatedComment);
     }
 
     @DeleteMapping("/{id}")

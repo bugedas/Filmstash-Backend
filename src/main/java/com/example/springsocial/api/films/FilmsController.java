@@ -65,7 +65,7 @@ public class FilmsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateFilm(@PathVariable Long id, @RequestBody Film film) {
+    public ResponseEntity updateFilm(@PathVariable(value = "id") Long id, @RequestBody Film film) {
         Film currentFilm = filmRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("Film of ID = " + id + " does not exist"));
         currentFilm.setFilmId(film.getFilmId());
         currentFilm.setUserId(film.getUserId());
@@ -80,9 +80,9 @@ public class FilmsController {
         currentFilm.setUserRated(film.getUserRated());
         currentFilm.setListType(film.getListType());
         currentFilm.setRankNr(film.getRankNr());
-        currentFilm = filmRepository.save(film);
+        final Film updatedFilm = filmRepository.save(currentFilm);
 
-        return ResponseEntity.ok(currentFilm);
+        return ResponseEntity.ok(updatedFilm);
     }
 
     @DeleteMapping("/{id}")

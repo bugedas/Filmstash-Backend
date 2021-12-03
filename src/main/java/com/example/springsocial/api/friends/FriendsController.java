@@ -49,13 +49,13 @@ public class FriendsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateFriend(@PathVariable Long id, @RequestBody Friend friend) {
+    public ResponseEntity updateFriend(@PathVariable(value = "id") Long id, @RequestBody Friend friend) {
         Friend currentFriend = friendRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("Friends relation of ID = " + id + " does not exist"));
         currentFriend.setFollowingId(friend.getFollowingId());
         currentFriend.setFollowedId(friend.getFollowedId());
-        currentFriend = friendRepository.save(friend);
+        final Friend updatedFriend = friendRepository.save(currentFriend);
 
-        return ResponseEntity.ok(currentFriend);
+        return ResponseEntity.ok(updatedFriend);
     }
 
     @DeleteMapping("/{id}")
