@@ -3,6 +3,9 @@ spring:
         url: jdbc:mysql://b0f0a805937444:148c8977@eu-cdbr-west-01.cleardb.com/heroku_d2adf96c06d327c?reconnect=true
         username: b0f0a805937444
         password: 148c8977
+#        url: jdbc:mysql://localhost:3306/filmstash_db
+#        username: root
+#        password: 123456
 
     jpa:
         show-sql: true
