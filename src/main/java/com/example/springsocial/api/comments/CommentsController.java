@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,8 @@ public class CommentsController {
 
     @PostMapping("/add")
     public ResponseEntity createComment(@RequestBody Comment comment) throws URISyntaxException {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        comment.setDate(timestamp);
         Comment savedComment = commentRepository.save(comment);
         return ResponseEntity.created(new URI("/comments/" + savedComment.getId())).body(savedComment);
     }

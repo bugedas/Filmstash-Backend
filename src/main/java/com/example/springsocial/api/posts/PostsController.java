@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,8 @@ public class PostsController {
 
     @PostMapping("/add")
     public ResponseEntity createPost(@RequestBody Post post) throws URISyntaxException {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        post.setDate(timestamp);
         Post savedPost = postRepository.save(post);
         return ResponseEntity.created(new URI("/posts/" + savedPost.getId())).body(savedPost);
     }

@@ -24,12 +24,12 @@ public class FilmsController {
         return filmRepository.findAll();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/film/id/{id}")
     public Film getFilmById(@PathVariable Long id) {
         return filmRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("Film of ID = " + id + " does not exist"));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/film/{id}")
     public List<Film> getFilmsByUser(@PathVariable Long id) {
         List<Film> allFilms = filmRepository.findAll();
         List<Film> filmsByUser = new ArrayList<>();
@@ -42,7 +42,7 @@ public class FilmsController {
         return filmsByUser;
     }
 
-    @GetMapping("/{uid}/{fid}")
+    @GetMapping("/film/{uid}/{fid}")
     public Film getFilmByUserAndFilm(@PathVariable Long uid, @PathVariable String fid) {
         List<Film> filmsByUser = getFilmsByUser(uid);
         Film film = new Film();
@@ -58,34 +58,68 @@ public class FilmsController {
         return film;
     }
 
-    @PostMapping("/add")
+    @GetMapping("/list/{uid}/{listName}")
+    public List<Film> getFilmByUserAndList(@PathVariable Long uid, @PathVariable String listName) {
+        List<Film> filmsByUser = getFilmsByUser(uid);
+        List<Film> filteredList = new ArrayList<>();
+        for (Film f : filmsByUser
+        ) {
+            if (f.getListType().equals(listName)) {
+                filteredList.add(f);
+            }
+        }
+        if (filteredList.isEmpty()) {
+            throw new CustomDataNotFoundException("Films list with a name: " + listName + " is empty or does not exist");
+        }
+        return filteredList;
+    }
+
+    @GetMapping("/list/{uid}")
+    public List<String> getFilmLists(@PathVariable Long uid) {
+        List<Film> filmsByUser = getFilmsByUser(uid);
+        List<String> lists = new ArrayList<>();
+        for (Film f : filmsByUser
+        ) {
+            if (!lists.contains(f.getListType())) {
+                lists.add(f.getListType());
+            }
+        }
+        return lists;
+    }
+
+    @DeleteMapping("/list/{uid}/{list}")
+    public ResponseEntity deleteList(@PathVariable Long id, @PathVariable String list) {
+        List<Film> films = getFilmByUserAndList(id, list);
+        for(Film f : films) {
+            try {
+                filmRepository.deleteById(f.getId());
+            } catch (Exception e) {
+                throw new CustomDataNotFoundException("Film of ID = " + f.getId() + " does not exist");
+            }
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/film/add")
     public ResponseEntity createFilm(@RequestBody Film film) throws URISyntaxException {
         Film savedFilm = filmRepository.save(film);
         return ResponseEntity.created(new URI("/api/films/" + savedFilm.getId())).body(savedFilm);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/film/{id}")
     public ResponseEntity updateFilm(@PathVariable(value = "id") Long id, @RequestBody Film film) {
         Film currentFilm = filmRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("Film of ID = " + id + " does not exist"));
         currentFilm.setFilmId(film.getFilmId());
         currentFilm.setUserId(film.getUserId());
-        currentFilm.setTitle(film.getTitle());
-        currentFilm.setFullTitle(film.getFullTitle());
-        currentFilm.setYear(film.getYear());
-        currentFilm.setImage(film.getImage());
-        currentFilm.setCrew(film.getCrew());
-        currentFilm.setImdbRating(film.getImdbRating());
-        currentFilm.setImdbRatingCount(film.getImdbRatingCount());
         currentFilm.setType(film.getType());
         currentFilm.setUserRated(film.getUserRated());
         currentFilm.setListType(film.getListType());
-        currentFilm.setRankNr(film.getRankNr());
         final Film updatedFilm = filmRepository.save(currentFilm);
 
         return ResponseEntity.ok(updatedFilm);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/film/{id}")
     public ResponseEntity deleteFilm(@PathVariable Long id) {
         try {
             filmRepository.deleteById(id);

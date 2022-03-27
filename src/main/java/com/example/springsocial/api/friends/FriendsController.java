@@ -1,6 +1,10 @@
 package com.example.springsocial.api.friends;
 
 import com.example.springsocial.api.exceptionHandling.exceptions.CustomDataNotFoundException;
+import com.example.springsocial.controller.UserController;
+import com.example.springsocial.model.User;
+import com.example.springsocial.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +18,9 @@ import java.util.List;
 public class FriendsController {
 
     private final FriendRepository friendRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public FriendsController(FriendRepository friendRepository) {
         this.friendRepository = friendRepository;
@@ -66,6 +73,20 @@ public class FriendsController {
             throw new CustomDataNotFoundException("Friends relation of ID = " + id + " does not exist");
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/user/full/{id}")
+    public List<User> getFriendsByUserFull(@PathVariable Long id) {
+        List<Friend> allFriends = friendRepository.findAll();
+        List<User> usersByUser = new ArrayList<>();
+        for (Friend f : allFriends
+        ) {
+            if (f.getFollowingId().equals(id)) {
+                User user = userRepository.findById(f.getFollowedId()).orElseThrow(() -> new CustomDataNotFoundException("User of ID = " + id + " does not exist"));
+                usersByUser.add(user);
+            }
+        }
+        return usersByUser;
     }
 
 }

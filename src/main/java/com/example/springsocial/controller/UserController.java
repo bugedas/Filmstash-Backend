@@ -1,8 +1,6 @@
 package com.example.springsocial.controller;
 
 import com.example.springsocial.api.exceptionHandling.exceptions.CustomDataNotFoundException;
-import com.example.springsocial.api.films.Film;
-import com.example.springsocial.api.posts.Post;
 import com.example.springsocial.exception.ResourceNotFoundException;
 import com.example.springsocial.model.User;
 import com.example.springsocial.repository.UserRepository;
@@ -36,6 +34,20 @@ public class UserController {
     public User getUser(@PathVariable Long id) {
         return userRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("User of ID = " + id + " does not exist"));
     }
+
+    @GetMapping("api/user/{search}")
+    public List<User> getUserSuggestions(@PathVariable String search) {
+        List<User> allUsers = userRepository.findAll();
+        List<User> filteredUsers = new ArrayList<>();
+        for (User user : allUsers) {
+            if (user.getEmail().toLowerCase().contains(search.toLowerCase())
+                    || user.getName().toLowerCase().contains(search.toLowerCase())) {
+                filteredUsers.add(user);
+            }
+        }
+        return filteredUsers;
+    }
+
     @GetMapping("api/user")
     public List<User> getUsers() {
         return userRepository.findAll();

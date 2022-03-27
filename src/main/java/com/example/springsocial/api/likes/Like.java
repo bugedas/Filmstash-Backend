@@ -1,44 +1,37 @@
-package com.example.springsocial.api.posts;
+package com.example.springsocial.api.likes;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "post")
-public class Post {
+@Table(name = "likes")
+public class Like {
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
     private String filmId;
     private Long userId;
-    private String message;
-    private int likes;
     private Timestamp date;
 
-    public Post(String filmId, Long userId, String message, int likes) {
+
+    public Like(String id, String filmId, Long userId) {
+        this.id = id;
         this.filmId = filmId;
         this.userId = userId;
-        this.message = message;
-        this.likes = likes;
     }
 
-    public Post() {
+    public Like() {
         this.filmId = "";
         this.userId = null;
-        this.message = "";
-        this.likes = 0;
         this.date = null;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -56,22 +49,6 @@ public class Post {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
     }
 
     public Timestamp getDate() {

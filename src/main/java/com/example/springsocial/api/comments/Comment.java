@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "comment")
@@ -16,14 +17,13 @@ public class Comment {
     private Long userId;
     private String message;
     private int likes;
-    private Date date;
+    private Timestamp date;
 
-    public Comment(Long postId, Long userId, String message, int likes, Date date) {
+    public Comment(Long postId, Long userId, String message, int likes) {
         this.postId = postId;
         this.userId = userId;
         this.message = message;
         this.likes = likes;
-        this.date = date;
     }
 
     public Comment() {
@@ -74,11 +74,11 @@ public class Comment {
         this.likes = likes;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 }
