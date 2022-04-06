@@ -59,6 +59,7 @@ public class PostsController {
         currentPost.setMessage(post.getMessage());
         currentPost.setLikes(post.getLikes());
         currentPost.setDate(post.getDate());
+        currentPost.setType(post.getType());
         final Post updatedPost = postRepository.save(currentPost);
 
         return ResponseEntity.ok(updatedPost);

@@ -18,12 +18,14 @@ public class Post {
     private String message;
     private int likes;
     private Timestamp date;
+    private String type;
 
-    public Post(String filmId, Long userId, String message, int likes) {
+    public Post(String filmId, Long userId, String message, int likes, String type) {
         this.filmId = filmId;
         this.userId = userId;
         this.message = message;
         this.likes = likes;
+        this.type = type;
     }
 
     public Post() {
@@ -32,6 +34,7 @@ public class Post {
         this.message = "";
         this.likes = 0;
         this.date = null;
+        this.type = "";
     }
 
     public Long getId() {
@@ -80,5 +83,13 @@ public class Post {
 
     public void setDate(Timestamp date) {
         this.date = date;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

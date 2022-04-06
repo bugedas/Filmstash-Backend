@@ -23,6 +23,8 @@ public class User {
 
     private String imageUrl;
 
+    private boolean userPrivate;
+
     @Column(nullable = false)
     private Boolean emailVerified = false;
 
@@ -97,5 +99,13 @@ public class User {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public boolean getUserPrivate() {
+        return userPrivate;
+    }
+
+    public void setUserPrivate(boolean userPrivate) {
+        this.userPrivate = userPrivate;
     }
 }

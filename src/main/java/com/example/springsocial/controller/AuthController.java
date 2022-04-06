@@ -8,13 +8,17 @@ import com.example.springsocial.payload.AuthResponse;
 import com.example.springsocial.payload.LoginRequest;
 import com.example.springsocial.payload.SignUpRequest;
 import com.example.springsocial.repository.UserRepository;
+import com.example.springsocial.security.CurrentUser;
 import com.example.springsocial.security.TokenProvider;
+import com.example.springsocial.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -77,6 +81,15 @@ public class AuthController {
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "User registered successfully@"));
+    }
+
+    @PostMapping("/user/checkpass")
+    @PreAuthorize("hasRole('USER')")
+    public Boolean checkPass(@RequestBody String pass) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String password = ((UserDetails)principal).getPassword();
+
+        return passwordEncoder.matches(pass, password);
     }
 
 }
