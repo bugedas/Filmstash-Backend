@@ -44,9 +44,7 @@ public class UserController {
         User currentUser = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
         currentUser.setName(user.getName());
-        if(user.getPassword() != null){
-            currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
+        currentUser.setUserPrivate(user.getUserPrivate());
         final User updatedUser = userRepository.save(currentUser);
 
         return ResponseEntity.ok(updatedUser);

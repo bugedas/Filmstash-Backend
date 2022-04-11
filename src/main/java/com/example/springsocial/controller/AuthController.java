@@ -25,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -89,7 +90,19 @@ public class AuthController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String password = ((UserDetails)principal).getPassword();
 
-        return passwordEncoder.matches(pass, password);
+        return passwordEncoder.matches(password, pass);
+    }
+
+    @PostMapping("/user/changePass")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Boolean> changePassword(@CurrentUser UserPrincipal userPrincipal, @RequestBody String pass) {
+        Optional<User> user = userRepository.findById(userPrincipal.getId());
+        user.ifPresent(usr -> {
+            usr.setPassword(passwordEncoder.encode(pass));
+            userRepository.save(usr);
+        });
+
+        return ResponseEntity.ok(true);
     }
 
 }

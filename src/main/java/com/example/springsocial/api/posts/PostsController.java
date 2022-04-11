@@ -1,6 +1,8 @@
 package com.example.springsocial.api.posts;
 
 import com.example.springsocial.api.exceptionHandling.exceptions.CustomDataNotFoundException;
+import com.example.springsocial.model.User;
+import com.example.springsocial.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,10 @@ public class PostsController {
 
     private final PostRepository postRepository;
 
-    public PostsController(PostRepository postRepository) {
-        this.postRepository = postRepository;
+    private final UserRepository userRepository;
+
+    public PostsController(PostRepository postRepository, UserRepository userRepository) {
+        this.postRepository = postRepository; this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -75,4 +79,42 @@ public class PostsController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/film/{id}/{type}")
+    public List<PostUser> getPostsByFilmId(@PathVariable String id, @PathVariable String type ) {
+        List<Post> allPosts = postRepository.findAll();
+        List<PostUser> postsByFilm = new ArrayList<>();
+        for (Post p : allPosts
+        ) {
+            if (p.getFilmId().equals(id) && p.getType().equals(type)) {
+                PostUser postUser = new PostUser();
+                User user = userRepository.getById(p.getUserId());
+                postUser.setPost(p);
+                postUser.setUserName(user.getName());
+                postsByFilm.add(postUser);
+            }
+        }
+        return postsByFilm;
+    }
+}
+
+class PostUser {
+    public Post post;
+
+    public String userName;
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }
