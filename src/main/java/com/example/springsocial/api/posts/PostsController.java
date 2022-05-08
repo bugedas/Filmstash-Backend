@@ -1,8 +1,8 @@
 package com.example.springsocial.api.posts;
 
 import com.example.springsocial.api.exceptionHandling.exceptions.CustomDataNotFoundException;
-import com.example.springsocial.model.User;
-import com.example.springsocial.repository.UserRepository;
+import com.example.springsocial.api.users.User;
+import com.example.springsocial.api.users.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -58,48 +58,6 @@ public class FilmsController {
         return film;
     }
 
-    @GetMapping("/list/{uid}/{listName}")
-    public List<Film> getFilmByUserAndList(@PathVariable Long uid, @PathVariable String listName) {
-        List<Film> filmsByUser = getFilmsByUser(uid);
-        List<Film> filteredList = new ArrayList<>();
-        for (Film f : filmsByUser
-        ) {
-            if (f.getListType().equals(listName)) {
-                filteredList.add(f);
-            }
-        }
-        if (filteredList.isEmpty()) {
-            throw new CustomDataNotFoundException("Films list with a name: " + listName + " is empty or does not exist");
-        }
-        return filteredList;
-    }
-
-    @GetMapping("/list/{uid}")
-    public List<String> getFilmLists(@PathVariable Long uid) {
-        List<Film> filmsByUser = getFilmsByUser(uid);
-        List<String> lists = new ArrayList<>();
-        for (Film f : filmsByUser
-        ) {
-            if (!lists.contains(f.getListType())) {
-                lists.add(f.getListType());
-            }
-        }
-        return lists;
-    }
-
-    @DeleteMapping("/list/{uid}/{list}")
-    public ResponseEntity deleteList(@PathVariable Long id, @PathVariable String list) {
-        List<Film> films = getFilmByUserAndList(id, list);
-        for(Film f : films) {
-            try {
-                filmRepository.deleteById(f.getId());
-            } catch (Exception e) {
-                throw new CustomDataNotFoundException("Film of ID = " + f.getId() + " does not exist");
-            }
-        }
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/film/add")
     public ResponseEntity createFilm(@RequestBody Film film) throws URISyntaxException {
         Film savedFilm = filmRepository.save(film);

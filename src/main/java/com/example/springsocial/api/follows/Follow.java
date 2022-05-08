@@ -1,4 +1,4 @@
-package com.example.springsocial.api.friends;
+package com.example.springsocial.api.follows;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,19 +7,19 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "friend")
-public class Friend {
+public class Follow {
     @Id
     @GeneratedValue
     private Long id;
     private Long followingId;
     private Long followedId;
 
-    public Friend(Long followingId, Long followedId) {
+    public Follow(Long followingId, Long followedId) {
         this.followingId = followingId;
         this.followedId = followedId;
     }
 
-    public Friend() {
+    public Follow() {
         this.followingId = null;
         this.followedId = null;
     }

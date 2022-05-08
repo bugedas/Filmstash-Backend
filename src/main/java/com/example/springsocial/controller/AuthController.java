@@ -2,12 +2,12 @@ package com.example.springsocial.controller;
 
 import com.example.springsocial.exception.BadRequestException;
 import com.example.springsocial.model.AuthProvider;
-import com.example.springsocial.model.User;
+import com.example.springsocial.api.users.User;
 import com.example.springsocial.payload.ApiResponse;
 import com.example.springsocial.payload.AuthResponse;
 import com.example.springsocial.payload.LoginRequest;
 import com.example.springsocial.payload.SignUpRequest;
-import com.example.springsocial.repository.UserRepository;
+import com.example.springsocial.api.users.UserRepository;
 import com.example.springsocial.security.CurrentUser;
 import com.example.springsocial.security.TokenProvider;
 import com.example.springsocial.security.UserPrincipal;

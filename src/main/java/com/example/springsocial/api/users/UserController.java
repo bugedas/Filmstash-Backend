@@ -1,30 +1,24 @@
-package com.example.springsocial.controller;
+package com.example.springsocial.api.users;
 
 import com.example.springsocial.api.comments.Comment;
 import com.example.springsocial.api.comments.CommentRepository;
 import com.example.springsocial.api.exceptionHandling.exceptions.CustomDataNotFoundException;
-import com.example.springsocial.api.friends.Friend;
-import com.example.springsocial.api.friends.FriendRepository;
+import com.example.springsocial.api.follows.Follow;
+import com.example.springsocial.api.follows.FollowRepository;
 import com.example.springsocial.api.posts.Post;
 import com.example.springsocial.api.posts.PostRepository;
 import com.example.springsocial.api.watchingNow.WatchingNow;
 import com.example.springsocial.api.watchingNow.WatchingNowRepository;
 import com.example.springsocial.exception.ResourceNotFoundException;
-import com.example.springsocial.model.User;
-import com.example.springsocial.repository.UserRepository;
 import com.example.springsocial.security.CurrentUser;
 import com.example.springsocial.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -33,7 +27,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private FriendRepository friendRepository;
+    private FollowRepository followRepository;
 
     @Autowired
     private PostRepository postsRepository;
@@ -100,14 +94,14 @@ public class UserController {
     @GetMapping("api/user/metrics/{id}")
     public UserMetrics getUserMetrics(@PathVariable Long id) {
 
-        List<Friend> allFriends = friendRepository.findAll();
+        List<Follow> allFollows = followRepository.findAll();
         int myFollowing = 0;
         int myFollowers = 0;
-        for (Friend friend : allFriends) {
-            if(friend.getFollowingId().equals(id)){
+        for (Follow follow : allFollows) {
+            if(follow.getFollowingId().equals(id)){
                 myFollowing = myFollowing + 1;
             }
-            if(friend.getFollowedId().equals(id)){
+            if(follow.getFollowedId().equals(id)){
                 myFollowers = myFollowers + 1;
             }
         }

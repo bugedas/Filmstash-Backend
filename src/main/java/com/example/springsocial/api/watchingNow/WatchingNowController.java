@@ -20,12 +20,12 @@ public class WatchingNowController {
     }
 
     @GetMapping
-    public List<WatchingNow> getFilms() {
+    public List<WatchingNow> getWatchingNow() {
         return watchingNowRepository.findAll();
     }
 
     @GetMapping("/id/{id}")
-    public WatchingNow getFilmById(@PathVariable Long id) {
+    public WatchingNow getWatchingNowById(@PathVariable Long id) {
         return watchingNowRepository.findById(id).orElseThrow(() -> new CustomDataNotFoundException("Tv of ID = " + id + " does not exist"));
     }
 
